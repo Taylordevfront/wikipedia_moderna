@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WikiModerna — Carros & Motos</title>
+  <meta name="description" content="Exercício de recriação estilo Wikipedia com layout moderno, semântica e acessibilidade. Tema: Carros e Motos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card: #f8f9fa;
+      --text: #1f2328;
+      --muted: #5b6168;
+      --border: #e5e7eb;
+      --link: #2563eb;
+      --link-visited: #7c3aed;
+      --accent: #0ea5e9;
+      --focus: #f59e0b;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0f14;
+        --card: #0f141a;
+        --text: #e5e7eb;
+        --muted: #9aa4b2;
+        --border: #1f2937;
+        --link: #60a5fa;
+        --link-visited: #a78bfa;
+        --accent: #22d3ee;
+        --focus: #fbbf24;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--link); }
+    a:visited { color: var(--link-visited); }
+    img { max-width: 100%; height: auto; }
+
+    /* Acessibilidade: foco visível e skip link */
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+    .skip-link { position: absolute; left: -9999px; }
+    .skip-link:focus { left: 1rem; top: 1rem; padding: .5rem .75rem; background: var(--accent); color: #001; border-radius: .5rem; }
+
+    header.site-header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(6px); background: color-mix(in oklab, var(--bg), transparent 20%); border-bottom: 1px solid var(--border); }
+    .header-inner { max-width: 1200px; margin: 0 auto; padding: .75rem 1rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; }
+    .brand { display: flex; gap: .75rem; align-items: center; }
+    .brand__logo { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 8px; background: var(--card); border: 1px solid var(--border); font-weight: 700; }
+
+    .search { display: flex; align-items: center; gap: .5rem; }
+    .search label { position: absolute; left: -9999px; }
+    .search input[type="search"] { width: min(55vw, 440px); padding: .6rem .8rem; border: 1px solid var(--border); border-radius: .65rem; background: var(--card); color: var(--text); }
+    .search button { padding: .6rem .9rem; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: .65rem; cursor: pointer; }
+
+    .shell { max-width: 1200px; margin: 0 auto; padding: 1rem; display: grid; gap: 1rem; grid-template-columns: 240px 1fr 300px; align-items: start; }
+    @media (max-width: 1040px) { .shell { grid-template-columns: 220px 1fr; } aside.infobox { display:none; } }
+    @media (max-width: 760px) { .shell { grid-template-columns: 1fr; } }
+
+    nav.sidebar { position: sticky; top: 4.25rem; align-self: start; border: 1px solid var(--border); border-radius: 12px; background: var(--card); padding: .75rem; }
+    nav.sidebar h2 { font-size: 1rem; margin: .25rem .25rem .5rem; }
+    nav.sidebar ul { list-style: none; margin: 0; padding: 0; }
+    nav.sidebar li { margin: .25rem 0; }
+    nav.sidebar a { display: block; padding: .5rem .6rem; border-radius: .5rem; text-decoration: none; color: var(--text); }
+    nav.sidebar a[aria-current="page"], nav.sidebar a:hover { background: color-mix(in oklab, var(--accent), transparent 85%); }
+
+    main { display: grid; gap: 1rem; }
+    article { border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 1rem; }
+    .article-header { border-bottom: 1px solid var(--border); padding-bottom: .5rem; margin-bottom: .5rem; }
+    .meta { color: var(--muted); font-size: .9rem; }
+
+    .toc { border: 1px dashed var(--border); border-radius: 10px; padding: .75rem; background: color-mix(in oklab, var(--card), transparent 10%); }
+    .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 760px) { .grid-two { grid-template-columns: 1fr; } }
+
+    aside.infobox { position: sticky; top: 4.25rem; align-self: start; border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: .75rem; }
+    .infobox figure { margin: 0; }
+    .infobox table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    .infobox th, .infobox td { border-top: 1px solid var(--border); padding: .35rem .25rem; text-align: left; vertical-align: top; }
+    .infobox caption { font-weight: 700; text-align: left; padding: .25rem 0 .5rem; }
+
+    footer.site-footer { margin-top: 2rem; border-top: 1px solid var(--border); color: var(--muted); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 1rem; font-size: .9rem; }
+
+    .table { width: 100%; border-collapse: collapse; }
+    .table caption { text-align: left; font-weight: 600; padding: .5rem 0; }
+    .table th, .table td { border: 1px solid var(--border); padding: .5rem .5rem; }
+    .table th { background: color-mix(in oklab, var(--card), transparent 10%); }
+
+    blockquote { margin: 1rem 0; padding: .75rem 1rem; background: color-mix(in oklab, var(--card), transparent 5%); border-left: 4px solid var(--accent); border-radius: 8px; }
+    pre { background: #0a0a0a10; padding: .75rem; border-radius: 8px; overflow: auto; }
+    code, kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 .35rem; border-radius: 4px; background: var(--card); }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .badge { display: inline-block; padding: .15rem .45rem; border-radius: 999px; background: color-mix(in oklab, var(--accent), transparent 85%); }
+  </style>
+</head>
+<body>
+  <a href="#conteudo" class="skip-link">Pular para o conteúdo principal</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">W</div>
+        <div>
+          <div class="brand__title">WikiModerna</div>
+          <small class="muted">Carros & Motos — Semântica e Acessibilidade</small>
+        </div>
+      </div>
+      <form class="search" role="search" aria-label="Pesquisar artigos" action="#" method="get">
+        <label for="q">Pesquisar</label>
+        <input id="q" name="q" type="search" placeholder="Pesquisar carros, motos, fabricantes…" />
+        <button type="submit" aria-label="Buscar">🔎</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="sidebar" aria-label="Navegação da Wiki">
+      <h2>Navegação</h2>
+      <ul>
+        <li><a href="#intro" aria-current="page">Introdução</a></li>
+        <li><a href="#carros">Carros</a></li>
+        <li><a href="#motos">Motos</a></li>
+        <li><a href="#tabela">Comparativo</a></li>
+        <li><a href="#acessibilidade">Acessibilidade</a></li>
+        <li><a href="#referencias">Referências</a></li>
+      </ul>
+      <hr>
+      <h2>Sumário</h2>
+      <details class="toc" open>
+        <summary>Conteúdo desta página</summary>
+        <ol>
+          <li><a href="#intro">Introdução</a></li>
+          <li><a href="#carros">Automóveis</a></li>
+          <li><a href="#motos">Motocicletas</a></li>
+          <li><a href="#tabela">Tabela comparativa</a></li>
+          <li><a href="#acessibilidade">Boas práticas de A11y</a></li>
+        </ol>
+      </details>
+    </nav>
+
+    <main id="conteudo" role="main">
+      <article aria-labelledby="titulo-artigo">
+        <header class="article-header">
+          <h1 id="titulo-artigo">Carros e Motos</h1>
+          <p class="meta">Última edição em <time datetime="2025-08-27">27 de agosto de 2025</time> · <span class="badge">artigo em desenvolvimento</span></p>
+        </header>
+
+        <section id="intro" aria-labelledby="h2-intro">
+          <h2 id="h2-intro">Introdução</h2>
+          <p>Este artigo apresenta uma visão geral de <strong>automóveis</strong> e <strong>motocicletas</strong>, com foco em estruturação de conteúdo em HTML, <em>semântica</em> e <u>acessibilidade</u>. Tanto carros quanto motos evoluíram para oferecer <mark>eficiência</mark>, <small>compacidade</small> e desempenho. Exemplos de notação técnica: H<sub>2</sub>O e 2<sup>10</sup>. Podemos ainda usar <i>itálico</i>, <del>texto removido</del> e forçar uma quebra de linha<br>quando necessário. 
+          Também registramos que a tag <font color="blue" face="Arial">&lt;font&gt; (obsoleta)</font> existe apenas para fins didáticos. </p>
+          <blockquote cite="https://www.example.com">“Transportes individuais motorizados moldaram cidades e hábitos de deslocamento em todo o mundo.”</blockquote>
+        </section>
+
+        <section id="carros" aria-labelledby="h2-carros">
+          <h2 id="h2-carros">Automóveis (Carros)</h2>
+          <div class="grid-two">
+            <div>
+              <p>Automóveis são veículos de quatro rodas projetados para transporte de passageiros. Há diversas categorias, como <strong>hatchbacks</strong>, <strong>sedãs</strong>, <strong>SUVs</strong> e esportivos. Tecnologias recentes incluem motores <abbr title="Internal Combustion Engine">ICE</abbr>, híbridos e <abbr title="Vehicle powered purely by electricity stored in batteries">BEVs</abbr>.</p>
+              <h3>Características comuns</h3>
+              <ul>
+                <li>Carroceria (monobloco ou chassi)</li>
+                <li>Motorização (combustão, híbrida ou elétrica)</li>
+                <li>Sistemas de segurança ativa e passiva</li>
+              </ul>
+              <p>Para manutenção, veja também a <a href="#tabela">tabela comparativa</a> de custos.</p>
+            </div>
+            <div>
+              <figure>
+                <img src="/carro1.jpg" alt="Carro elétrico sedan moderno estacionado, visto de frente e lateral" width="640" height="360">
+                <figcaption>Figura 1 — Sedan elétrico moderno.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="motos" aria-labelledby="h2-motos">
+          <h2 id="h2-motos">Motocicletas (Motos)</h2>
+          <div class="grid-two">
+            <div>
+              <p>Motocicletas são veículos de duas rodas que prezam <strong>agilidade</strong> e <strong>economia</strong>. Entre os tipos populares estão <em>naked</em>, <em>sport</em>, <em>trail</em> e <em>scooter</em>.</p>
+              <h3>Cuidados de pilotagem</h3>
+              <ol>
+                <li>Uso de capacete e EPI certificado.</li>
+                <li>Condução defensiva e distância segura.</li>
+                <li>Revisões periódicas de pneus e freios.</li>
+              </ol>
+            </div>
+            <div>
+              <figure>
+                <img src="/moto1.jpeg" alt="Motocicleta estilo naked estacionada, modelo de média cilindrada" width="640" height="360">
+                <figcaption>Figura 2 — Motocicleta naked de média cilindrada.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="tabela" aria-labelledby="h2-tabela">
+          <h2 id="h2-tabela">Tabela comparativa</h2>
+          <table class="table" role="table">
+            <caption>Comparação simplificada entre carro e moto</caption>
+            <thead>
+              <tr>
+                <th scope="col">Aspecto</th>
+                <th scope="col">Carro</th>
+                <th scope="col">Moto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Consumo</th>
+                <td>Maior gasto, porém varia com tecnologia híbrida/EV</td>
+                <td>Geralmente mais econômico</td>
+              </tr>
+              <tr>
+                <th scope="row">Mobilidade urbana</th>
+                <td>Conforto, porém sujeito a trânsito e estacionamento</td>
+                <td>Alta agilidade e facilidade de estacionamento</td>
+              </tr>
+              <tr>
+                <th scope="row">Segurança</th>
+                <td>Estrutura e sistemas de proteção</td>
+                <td>Exige EPI e atenção redobrada</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="acessibilidade" aria-labelledby="h2-a11y">
+          <h2 id="h2-a11y">Boas práticas de acessibilidade</h2>
+          <ul>
+            <li>Siga hierarquia de títulos: <code>h1</code> → <code>h2</code> → <code>h3</code>.</li>
+            <li>Forneça <code>alt</code> descritivo em imagens.</li>
+            <li>Garanta foco visível para teclado (<kbd>Tab</kbd>).</li>
+            <li>Use landmarks semânticos: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>.</li>
+            <li>Respeite preferências de tema com <code>prefers-color-scheme</code>.</li>
+          </ul>
+        </section>
+
+        <section id="referencias" aria-labelledby="h2-ref">
+          <h2 id="h2-ref">Referências</h2>
+          <p>Para aprofundar, consulte a <a href="https://developer.mozilla.org/" target="_blank" rel="noopener noreferrer">MDN Web Docs</a> e a documentação do <a href="https://www.w3.org/TR/WCAG/" target="_blank" rel="noopener noreferrer">W3C/WCAG</a>.</p>
+        </section>
+      </article>
+    </main>
+
+    <aside class="infobox" aria-labelledby="infobox-title">
+      <h2 id="infobox-title">Info Rápida</h2>
+      <figure>
+        <img src="/automovel.jpg" alt="Ícones estilizados de um carro e uma moto" width="220" height="160">
+        <figcaption>Transporte individual motorizado</figcaption>
+      </figure>
+      <table>
+        <caption>Resumo</caption>
+        <tbody>
+          <tr>
+            <th scope="row">Tema</th>
+            <td>Carros & Motos</td>
+          </tr>
+          <tr>
+            <th scope="row">Foco</th>
+            <td>Semântica, A11y, Estrutura</td>
+          </tr>
+          <tr>
+            <th scope="row">Última edição</th>
+            <td><time datetime="2025-08-27">27 ago 2025</time></td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <address>Conteúdo criado por <a href="#">Isabela</a>. </address>
+      <p><small>Licença educativa. Este projeto imita o estilo de layout da Wikipedia para fins de aprendizado.</small></p>
+    </div>
+  </footer>
+
+ 
+  <section aria-label="Demonstração de títulos" hidden>
+    <h1>H1</h1>
+    <h2>H2</h2>
+    <h3>H3</h3>
+    <h4>H4</h4>
+    <h5>H5</h5>
+    <h6>H6</h6>
+  </section>
+</body>
+</html>
